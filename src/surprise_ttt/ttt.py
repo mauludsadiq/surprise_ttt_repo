@@ -100,7 +100,7 @@ def run_ttt(
             batch = next(it)
         ids = batch.ids.to(device)
         with _amp_ctx(use_amp, amp_dtype):
-        loss = model.loss_next_token(ids)
+            loss = model.loss_next_token(ids)
         stats = updater.step_update(loss)
         losses.append(stats.loss)
         gammas.append(stats.gamma)
