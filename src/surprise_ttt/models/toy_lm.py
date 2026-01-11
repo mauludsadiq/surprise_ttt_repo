@@ -68,4 +68,27 @@ class ToyTransformerLM(nn.Module):
         targets = ids[:, 1:]
         return F.cross_entropy(logits.reshape(-1, logits.size(-1)), targets.reshape(-1))
 
+
+def make_toy_model(
+    vocab_size: int,
+    d_model: int = 256,
+    nhead: int = 4,
+    num_layers: int = 4,
+    dim_feedforward: int = 512,
+    max_len: int = 2048,
+    dropout: float = 0.1,
+    device: str = "cpu",
+) -> "ToyTransformerLM":
+    cfg = ToyLMConfig(
+        vocab_size=vocab_size,
+        d_model=d_model,
+        nhead=nhead,
+        num_layers=num_layers,
+        dim_feedforward=dim_feedforward,
+        dropout=dropout,
+        max_len=max_len,
+    )
+    m = ToyTransformerLM(cfg)
+    return m.to(device)
+
 ToyLM = ToyTransformerLM
