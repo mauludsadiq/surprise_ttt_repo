@@ -44,6 +44,19 @@ def make_toy_model(
     Model = _resolve_model_class()
     Cfg = _resolve_cfg_class()
 
+    # If toy_lm exposes an explicit factory, use it as the single source of truth.
+    if hasattr(toy_lm_mod, "make_toy_model"):
+        return toy_lm_mod.make_toy_model(
+            vocab_size=vocab_size,
+            d_model=d_model,
+            nhead=nhead,
+            num_layers=num_layers,
+            dim_feedforward=dim_feedforward,
+            max_len=max_len,
+            dropout=dropout,
+            device=device,
+        )
+
     kwargs: Dict[str, Any] = dict(
         vocab_size=vocab_size,
         d_model=d_model,
