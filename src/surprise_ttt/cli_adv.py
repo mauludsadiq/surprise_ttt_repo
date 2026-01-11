@@ -6,23 +6,7 @@ from pathlib import Path
 
 import torch
 
-from surprise_ttt.models import toy_lm as toy_lm_mod
-
-
-def _resolve_toy_lm_class():
-    import torch.nn as nn
-    for name in ("ToyLM","ToyLMModel","ToyTransformerLM","ToyLanguageModel"):
-        if hasattr(toy_lm_mod, name):
-            return getattr(toy_lm_mod, name)
-    for v in toy_lm_mod.__dict__.values():
-        try:
-            if isinstance(v, type) and issubclass(v, nn.Module):
-                return v
-        except Exception:
-            pass
-    raise ImportError("No nn.Module subclass found in surprise_ttt.models.toy_lm")
-
-ToyLM = _resolve_toy_lm_class()
+from surprise_ttt.models.toy_lm import ToyLM
 from surprise_ttt.ttt_adv import AdvCfg, run_ttt_adv
 
 
