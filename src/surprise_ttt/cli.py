@@ -43,7 +43,7 @@ def ttt(
     gate_tau: float = typer.Option(1.0, help="Surprise budget tau"),
     ema_alpha: float = typer.Option(0.95, help="EMA alpha"),
     lam: float = typer.Option(1e-3, help="Retention lambda"),
-    lam_schedule: str = typer.Option("constant", help="constant|inv_surprise|exp_decay"),
+    lam_schedule: str = typer.Option("constant", help="constant|inv_surprise|exp_decay|miras"),
     subset: str = typer.Option("mlp", help="all|mlp|ln|head"),
     update_blocks: str = typer.Option("all", help="all|last|last_quarter|range:a-b|list:i,j"),
     amp: bool = typer.Option(False, help="Enable mixed precision on CUDA"),

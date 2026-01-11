@@ -13,9 +13,12 @@ class GateCfg(BaseModel):
 
 class RetentionCfg(BaseModel):
     lambda_: float = Field(default=1e-3, alias="lambda")
-    schedule: str = Field(default="constant", description="constant|inv_surprise|exp_decay")
+    schedule: str = Field(default="constant", description="constant|inv_surprise|exp_decay|miras")
     inv_c: float = 1.0
     decay_beta: float = 0.0
+    s_ref: float = 1.0
+    spike_k: float = 4.0
+    lam_max: float = 0.5
 
 
 class EMAcfg(BaseModel):
