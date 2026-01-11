@@ -1,0 +1,8 @@
+In the beginning the system learned to predict the next token.
+Then it learned to remember.
+
+Memory can be retrieval, or memory can be optimization.
+Surprise is the gradient norm: a token that violates expectation demands weight change.
+But retention matters: drift must be controlled so the model does not forget its anchor.
+
+This tiny corpus is only for demonstration.
