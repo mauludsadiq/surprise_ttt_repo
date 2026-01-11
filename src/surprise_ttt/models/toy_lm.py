@@ -67,3 +67,5 @@ class ToyTransformerLM(nn.Module):
         logits = self.forward(ids[:, :-1])
         targets = ids[:, 1:]
         return F.cross_entropy(logits.reshape(-1, logits.size(-1)), targets.reshape(-1))
+
+ToyLM = ToyTransformerLM
