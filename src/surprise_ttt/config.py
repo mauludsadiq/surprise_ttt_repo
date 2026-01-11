@@ -27,15 +27,21 @@ class TTTcfg(BaseModel):
     batch_tokens: int = 64
     max_steps: int = 200
     lr: float = 5e-4
-    gate: GateCfg = GateCfg()
-    retention: RetentionCfg = RetentionCfg()
-    ema: EMAcfg = EMAcfg()
-    update_subset: str = Field(
 
-    update_blocks: str = "all"
-    amp: bool = False
-    amp_dtype: str = "bf16"
-    sdp: str = "auto"
+    gate: GateCfg = Field(default_factory=GateCfg)
+    retention: RetentionCfg = Field(default_factory=RetentionCfg)
+    ema: EMAcfg = Field(default_factory=EMAcfg)
+
+    update_subset: str = Field(
         default="mlp",
         description="which parameters to update: all|mlp|ln|head",
     )
+
+    update_blocks: str = Field(
+        default="all",
+        description="which blocks to update: all|last|last_quarter|range:a-b|list:i,j",
+    )
+
+    amp: bool = Field(default=False, description="enable mixed precision (CUDA only)")
+    amp_dtype: str = Field(default="bf16", description="bf16|fp16")
+    sdp: str = Field(default="auto", description="auto|flash|mem_efficient|math")
