@@ -86,6 +86,22 @@ def mark_trainable_subset(model: nn.Module, subset: UpdateSubset) -> List[torch.
                         ok = True
                         break
 
+
+        elif subset.scope in ("ln", "layernorm"):
+            if n_layers == 0:
+                ok = ("ln" in name.lower()) or ("norm" in name.lower())
+            else:
+                for i in layer_ids:
+                    prefix = f"enc.layers.{i}."
+                    if name.startswith(prefix) and ("norm" in name.lower() or ".norm" in name.lower()):
+                        ok = True
+                        break
+                if not ok and name.startswith("ln_f"):
+                    ok = True
+
+        elif subset.scope in ("head",):
+            ok = name.startswith("head.")
+
         else:
             raise ValueError(f"Unknown update scope: {subset.scope!r}")
 

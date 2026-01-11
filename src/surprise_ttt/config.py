@@ -31,6 +31,11 @@ class TTTcfg(BaseModel):
     retention: RetentionCfg = RetentionCfg()
     ema: EMAcfg = EMAcfg()
     update_subset: str = Field(
+
+    update_blocks: str = "all"
+    amp: bool = False
+    amp_dtype: str = "bf16"
+    sdp: str = "auto"
         default="mlp",
         description="which parameters to update: all|mlp|ln|head",
     )

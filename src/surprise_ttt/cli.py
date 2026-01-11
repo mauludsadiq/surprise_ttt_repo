@@ -10,6 +10,7 @@ from rich import print as rprint
 from .config import TTTcfg
 from .train import PretrainCfg, pretrain_toy_lm
 from .ttt import run_ttt
+from .sdp import configure_sdp
 
 app = typer.Typer(add_completion=False, no_args_is_help=True)
 
@@ -24,6 +25,7 @@ def pretrain(
     device: str = typer.Option("cpu", help="cpu|cuda"),
 ) -> None:
     Path(out).parent.mkdir(parents=True, exist_ok=True)
+    configure_sdp(sdp)
     cfg = PretrainCfg(steps=steps, batch_tokens=batch_tokens, lr=lr)
     pretrain_toy_lm(corpus_path=corpus, out_path=out, cfg=cfg, device=device)
     rprint(f"[green]Wrote[/green] {out}")
@@ -43,6 +45,10 @@ def ttt(
     lam: float = typer.Option(1e-3, help="Retention lambda"),
     lam_schedule: str = typer.Option("constant", help="constant|inv_surprise|exp_decay"),
     subset: str = typer.Option("mlp", help="all|mlp|ln|head"),
+    update_blocks: str = typer.Option("all", help="all|last|last_quarter|range:a-b|list:i,j"),
+    amp: bool = typer.Option(False, help="Enable mixed precision on CUDA"),
+    amp_dtype: str = typer.Option("bf16", help="bf16|fp16"),
+    sdp: str = typer.Option("auto", help="auto|flash|mem_efficient|math"),
     device: str = typer.Option("cpu", help="cpu|cuda"),
 ) -> None:
     Path(out).parent.mkdir(parents=True, exist_ok=True)
@@ -53,6 +59,10 @@ def ttt(
     cfg.retention.lambda_ = lam
     cfg.retention.schedule = lam_schedule
     cfg.update_subset = subset
+    cfg.update_blocks = update_blocks
+    cfg.amp = amp
+    cfg.amp_dtype = amp_dtype
+    cfg.sdp = sdp
 
     if cfg_json is not None:
         overrides = json.loads(Path(cfg_json).read_text(encoding="utf-8"))
